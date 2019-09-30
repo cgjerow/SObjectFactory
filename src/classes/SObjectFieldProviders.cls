@@ -4,7 +4,7 @@ public class SObjectFieldProviders
     public class CountException extends Exception { }
     public class EmptyQueryException extends Exception { }
     
-    public class UniqueNumberProvider implements IFieldProvider
+    public class UniqueNumberProvider implements FieldProvider
     {
         Integer counter;
         public UniqueNumberProvider() { this(0); }
@@ -18,7 +18,7 @@ public class SObjectFieldProviders
         }
     }
 
-    public class UniqueDateProvider implements IFieldProvider
+    public class UniqueDateProvider implements FieldProvider
     {
         final Date startDate;
         Integer counter;
@@ -34,7 +34,7 @@ public class SObjectFieldProviders
         }
     }
 
-	public class UniqueStringProvider implements IFieldProvider
+    public class UniqueStringProvider implements FieldProvider
     {
         final String base;
         Integer counter;
@@ -50,7 +50,7 @@ public class SObjectFieldProviders
         }
     }
 
-    public virtual class UniqueFixedLengthStringProvider implements IFieldProvider
+    public virtual class UniqueFixedLengthStringProvider implements FieldProvider
     {
         final String base;
         final Integer remainingLength;
@@ -74,8 +74,9 @@ public class SObjectFieldProviders
             return base + counterValue;
         }
     }
+
     public class DummyIdProvider
-        extends UniqueFixedLengthStringProvider implements IFieldProvider
+        extends UniqueFixedLengthStringProvider implements FieldProvider
     {
         public DummyIdProvider(String prefix, Integer length) { super(prefix, length); }
         public DummyIdProvider(SObjectType sObjectType) { this(sObjectType, 18); }
@@ -84,8 +85,8 @@ public class SObjectFieldProviders
             this(sObjectType.getDescribe().getKeyPrefix(), length);
         }
     }
-    
-    public virtual class ListProvider implements IFieldProvider
+
+    public virtual class ListProvider implements FieldProvider
     {
         final Integer size;
         final List<Object> values;
@@ -103,7 +104,8 @@ public class SObjectFieldProviders
             return value;
         }
     }
-    public class MultiParentProvider extends ListProvider implements IFieldProvider
+
+    public class MultiParentProvider extends ListProvider implements FieldProvider
     {
         public MultiParentProvider(Set<Id> parentIds)
         {
@@ -114,8 +116,8 @@ public class SObjectFieldProviders
             this(pluckIds(parents));
         }
     }
-    
-    public class GenericParentProvider implements IFieldProvider
+
+    public class GenericParentProvider implements FieldProvider
     {
         final SObjectBuilder builder;
         Id genericParentId;
@@ -134,8 +136,25 @@ public class SObjectFieldProviders
             return genericParentId;
         }
     }
-    
-    public class QueryParentProvider implements IFieldProvider
+
+    public class UniqueParentProvider implements FieldProvider
+    {
+        final SObjectBuilder builder;
+        public UniqueParentProvider(SObjectType sObjectType)
+        {
+            this.builder = new SObjectBuilder(sObjectType);
+        }
+        public UniqueParentProvider(SObjectType sObjectType, SObjectField field, Object value)
+        {
+            this.builder = new SObjectBuilder(sObjectType).put(field, value);
+        }
+        public Object getValue()
+        {
+            return builder.create().getRecord().Id;
+        }
+    }
+
+    public class QueryParentProvider implements FieldProvider
     {
         final String query;
         Id queriedParentId;

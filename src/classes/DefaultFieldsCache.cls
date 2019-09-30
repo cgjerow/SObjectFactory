@@ -1,5 +1,5 @@
 @IsTest
-public class RequiredFieldsCache
+public class DefaultFieldsCache
 {
     public static Map<SObjectField, Object> get(SObjectType sObjectType)
     {
@@ -7,13 +7,22 @@ public class RequiredFieldsCache
             cache.get(sObjectType) : new Map<SObjectField, Object>();
     }
 
-    public static IFieldProvider getGenericParentProvider(SObjectType sObjectType)
+    public static FieldProvider getGenericParentProvider(SObjectType sObjectType)
     {
         if (!genericParentProviders.containsKey(sObjectType))
             genericParentProviders.put(sObjectType, SObjectFactory.provideGenericParent(sObjectType));
         return genericParentProviders.get(sObjectType);
     }
-    static Map<SObjectType, IFieldProvider> genericParentProviders = new Map<SObjectType, IFieldProvider>();
+
+    public static FieldProvider getUniqueParentProvider(SObjectType sObjectType)
+    {
+        if (!uniqueParentProviders.containsKey(sObjectType))
+            uniqueParentProviders.put(sObjectType, SObjectFactory.provideUniqueParent(sObjectType));
+        return uniqueParentProviders.get(sObjectType);
+    }
+
+    static Map<SObjectType, IFieldProvider> uniqueParentProviders = new Map<SObjectType, FieldProvider>();
+    static Map<SObjectType, FieldProvider> genericParentProviders = new Map<SObjectType, FieldProvider>();
     
     static Map<SObjectType, Map<SObjectField, Object>> cache =
         new Map<SObjectType, Map<SObjectField, Object>>

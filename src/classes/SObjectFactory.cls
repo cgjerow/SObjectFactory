@@ -63,13 +63,12 @@ public class SObjectFactory
         return create(sObjectType, count, new Map<SObjectField, Object> { field => value });
     }
     
-    // all fields
     public static List<SObject> build(
         SObjectType sObjectType, Integer count,
         Map<SObjectField, Object> fieldToValue
     )
     {
-        Map<SObjectField, Object> fields = RequiredFieldsCache.get(sObjectType);
+        Map<SObjectField, Object> fields = DefaultFieldsCache.get(sObjectType);
         if (fieldToValue != null) fields.putAll(fieldToValue);
         
         List<SObject> records = new List<SObject>();
@@ -79,8 +78,8 @@ public class SObjectFactory
             for (SObjectField field : fields.keySet())
             {
                 Object value = fields.get(field);
-                if (value instanceOf IFieldProvider)
-                    value = ((IFieldProvider)value).getValue();
+                if (value instanceOf FieldProvider)
+                    value = ((FieldProvider)value).getValue();
                 record.put(field, value);
             }
             records.add(record);
@@ -97,88 +96,96 @@ public class SObjectFactory
         return records;
     }
     
-    // providers
-    public static IFieldProvider provideStandardProfile()
+    public static FieldProvider provideStandardProfile()
     {
         return new SObjectFieldProviders.QueryParentProvider(
             'SELECT Id FROM Profile WHERE Name = \'Standard User\' LIMIT 1'
         );
     }
     
-    public static IFieldProvider provideUniqueNumber()
+    public static FieldProvider provideUniqueNumber()
     {
         return new SObjectFieldProviders.UniqueNumberProvider();
     }
-    public static IFieldProvider provideUniqueNumber(Integer start)
+    public static FieldProvider provideUniqueNumber(Integer start)
     {
         return new SObjectFieldProviders.UniqueNumberProvider(start);
     }
 
-    public static IFieldProvider provideUniqueDate()
+    public static FieldProvider provideUniqueDate()
     {
         return new SObjectFieldProviders.UniqueDateProvider();
     }
-    public static IFieldProvider provideUniqueDate(Date startDate)
+    public static FieldProvider provideUniqueDate(Date startDate)
     {
         return new SObjectFieldProviders.UniqueDateProvider(startDate);
     }
 
-    public static IFieldProvider provideUniqueString()
+    public static FieldProvider provideUniqueString()
     {
         return new SObjectFieldProviders.UniqueStringProvider();
     }
-    public static IFieldProvider provideUniqueString(String base)
+    public static FieldProvider provideUniqueString(String base)
     {
         return new SObjectFieldProviders.UniqueStringProvider(base);
     }
     
-    public static IFieldProvider provideUniqueFixedLengthString(Integer length)
+    public static FieldProvider provideUniqueFixedLengthString(Integer length)
     {
         return new SObjectFieldProviders.UniqueFixedLengthStringProvider(length);
     }
-    public static IFieldProvider provideUniqueFixedLengthString(String base, Integer length)
+    public static FieldProvider provideUniqueFixedLengthString(String base, Integer length)
     {
         return new SObjectFieldProviders.UniqueFixedLengthStringProvider(base, length);
     }
 
-    public static IFieldProvider provideDummyId(SObjectType sObjectType)
+    public static FieldProvider provideDummyId(SObjectType sObjectType)
     {
         return new SObjectFieldProviders.DummyIdProvider(sObjectType);
     }
 
-    public static IFieldProvider provideGenericParent(SObjectType sObjectType)
+    public static FieldProvider provideGenericParent(SObjectType sObjectType)
     {
         return new SObjectFieldProviders.GenericParentProvider(sObjectType);
     }
-    public static IFieldProvider provideGenericParent(SObjectType sObjectType, SObjectField field, Object value)
+    public static FieldProvider provideGenericParent(SObjectType sObjectType, SObjectField field, Object value)
     {
         return new SObjectFieldProviders.GenericParentProvider(sObjectType, field, value);
     }
 
-    public static IFieldProvider provideList(List<Object> values)
+    public static FieldProvider provideList(List<Object> values)
     {
         return new SObjectFieldProviders.ListProvider(values);
     }
 
-    public static IFieldProvider provideParents(SObjectType sObjectType, Integer count)
+    public static FieldProvider provideParents(SObjectType sObjectType, Integer count)
     {
         return new SObjectFieldProviders.MultiParentProvider(SObjectFactory.create(sObjectType, count));
     }
-    public static IFieldProvider provideParents(List<SObject> parents)
+    public static FieldProvider provideParents(List<SObject> parents)
     {
         return new SObjectFieldProviders.MultiParentProvider(parents);
     }
-    public static IFieldProvider provideParents(Set<Id> parentIds)
+    public static FieldProvider provideParents(Set<Id> parentIds)
     {
         return new SObjectFieldProviders.MultiParentProvider(parentIds);
     }
 
-    public static IFieldProvider provideQueriedParent(String query)
+    public static FieldProvider provideQueriedParent(String query)
     {
         return new SObjectFieldProviders.QueryParentProvider(query);
     }
-    public static IFieldProvider provideQueriedParent(SObjectType sObjectType)
+    public static FieldProvider provideQueriedParent(SObjectType sObjectType)
     {
         return new SObjectFieldProviders.QueryParentProvider(sObjectType);
+    }
+
+    public static FieldProvider provideUniqueParent(SObjectType sObjectType)
+    {
+        return new SObjectFieldProviders.UniqueParentProvider(sObjectType);
+    }
+    public static FieldProvider provideUniqueParent(SObjectType sObjectType, SObjectField field, Object value)
+    {
+        return new SObjectFieldProviders.UniqueParentProvider(sObjectType, field, value);
     }
 }
