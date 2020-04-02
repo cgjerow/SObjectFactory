@@ -21,7 +21,7 @@ public class DefaultFieldsCache
         return uniqueParentProviders.get(sObjectType);
     }
 
-    static Map<SObjectType, IFieldProvider> uniqueParentProviders = new Map<SObjectType, FieldProvider>();
+    static Map<SObjectType, FieldProvider> uniqueParentProviders = new Map<SObjectType, FieldProvider>();
     static Map<SObjectType, FieldProvider> genericParentProviders = new Map<SObjectType, FieldProvider>();
     
     static Map<SObjectType, Map<SObjectField, Object>> cache =
