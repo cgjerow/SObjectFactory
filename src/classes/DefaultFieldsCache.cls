@@ -43,11 +43,6 @@ public class DefaultFieldsCache
             AccountShare.AccountId => getGenericParentProvider(Account.sObjectType),
             AccountShare.UserOrGroupId => getGenericParentProvider(Group.sObjectType)
         },
-        AccountTeamMember.sObjectType => new Map<SObjectField, Object>
-        {
-            AccountTeamMember.AccountId => getGenericParentProvider(Account.sObjectType),
-            AccountTeamMember.UserId => getGenericParentProvider(User.sObjectType)
-        },
         Announcement.sObjectType => new Map<SObjectField, Object>
         {
             Announcement.FeedItemId => SObjectFactory.provideGenericParent(FeedItem.sObjectType, FeedItem.ParentId, getGenericParentProvider(CollaborationGroup.sObjectType)),
@@ -72,11 +67,6 @@ public class DefaultFieldsCache
         {
             CampaignMember.CampaignId => getGenericParentProvider(Campaign.sObjectType),
             CampaignMember.ContactId => getGenericParentProvider(Contact.sObjectType)
-        },
-        CaseArticle.sObjectType => new Map<SObjectField, Object>
-        {
-            CaseArticle.CaseId => getGenericParentProvider(Case.sObjectType),
-            CaseArticle.KnowledgeArticleId => SObjectFactory.provideQueriedParent(KnowledgeArticle.sObjectType)
         },
         CaseComment.sObjectType => new Map<SObjectField, Object>
         {
@@ -169,13 +159,6 @@ public class DefaultFieldsCache
             ContractContactRole.ContractId => getGenericParentProvider(Contract.sObjectType),
             ContractContactRole.ContactId => getGenericParentProvider(Contact.sObjectType)
         },
-        ContractLineItem.sObjectType => new Map<SObjectField, Object>
-        {
-            ContractLineItem.ServiceContractId => getGenericParentProvider(ServiceContract.sObjectType),
-            ContractLineItem.PricebookEntryId => getGenericParentProvider(PricebookEntry.sObjectType),
-            ContractLineItem.Quantity => 1,
-            ContractLineItem.UnitPrice => 1
-        },
         Document.sObjectType => new Map<SObjectField, Object>
         {
             Document.FolderId => getGenericParentProvider(User.sObjectType),
@@ -191,20 +174,6 @@ public class DefaultFieldsCache
             EmailTemplate.FolderId => getGenericParentProvider(User.sObjectType),
             EmailTemplate.TemplateType => 'Text',
             EmailTemplate.Name => 'Some Template'
-        },
-        Entitlement.sObjectType => new Map<SObjectField, Object>
-        {
-            Entitlement.AccountId => getGenericParentProvider(Account.sObjectType),
-            Entitlement.Name => 'Some Entitlement'
-        },
-        EntitlementContact.sObjectType => new Map<SObjectField, Object>
-        {
-            EntitlementContact.EntitlementId => getGenericParentProvider(Entitlement.sObjectType),
-            EntitlementContact.ContactId => getGenericParentProvider(Contact.sObjectType)
-        },
-        EntitlementTemplate.sObjectType => new Map<SObjectField, Object>
-        {
-            EntitlementTemplate.Name => SObjectFactory.provideUniqueString('Template')
         },
         EntitySubscription.sObjectType => new Map<SObjectField, Object>
         {
@@ -242,12 +211,6 @@ public class DefaultFieldsCache
             FieldPermissions.SObjectType => String.valueOf(Opportunity.sObjectType),
             FieldPermissions.PermissionsRead => true
         },
-        GoogleDoc.sObjectType => new Map<SObjectField, Object>
-        {
-            GoogleDoc.Url => SObjectFactory.provideUniqueString('https://docs.google.com/a/example.com/file/d/'),
-            GoogleDoc.ParentId => getGenericParentProvider(Account.sObjectType),
-            GoogleDoc.Name => 'Some Document'
-        },
         Group.sObjectType => new Map<SObjectField, Object>
         {
             Group.Name => 'Some Group'
@@ -282,48 +245,6 @@ public class DefaultFieldsCache
             LeadShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
             LeadShare.LeadId => getGenericParentProvider(Lead.sObjectType),
             LeadShare.LeadAccessLevel => 'Edit'
-        },
-        LiveAgentSession.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveAgentSession.AgentId => getGenericParentProvider(User.sObjectType),
-            LiveAgentSession.LoginTime => Datetime.now(),
-            LiveAgentSession.LogoutTime => Datetime.now()
-        },
-        LiveAgentSessionShare.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveAgentSessionShare.ParentId => getGenericParentProvider(LiveAgentSession.sObjectType),
-            LiveAgentSessionShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
-            LiveAgentSessionShare.AccessLevel => 'Edit'
-        },
-        LiveChatTranscript.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveChatTranscript.LiveChatVisitorId => getGenericParentProvider(LiveChatVisitor.sObjectType)
-        },
-        LiveChatTranscriptEvent.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveChatTranscriptEvent.LiveChatTranscriptId => getGenericParentProvider(LiveChatTranscript.sObjectType),
-            LiveChatTranscriptEvent.Time => Datetime.now(),
-            LiveChatTranscriptEvent.Type => 'Transfer'
-        },
-        LiveChatTranscriptShare.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveChatTranscriptShare.ParentId => getGenericParentProvider(LiveChatTranscript.sObjectType),
-            LiveChatTranscriptShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
-            LiveChatTranscriptShare.AccessLevel => 'Edit'
-        },
-        LiveChatTranscriptSkill.sObjectType => new Map<SObjectField, Object>
-        {
-            LiveChatTranscriptSkill.TranscriptId => getGenericParentProvider(LiveChatTranscript.sObjectType),
-            LiveChatTranscriptSkill.SkillId => SObjectFactory.provideQueriedParent(Skill.sObjectType)
-        },
-        MilestoneType.sObjectType => new Map<SObjectField, Object>
-        {
-            MilestoneType.Name => SObjectFactory.provideUniqueString('MilestoneType')
-        },
-        NetworkModeration.sObjectType => new Map<SObjectField, Object>
-        {
-            NetworkModeration.NetworkId => SObjectFactory.provideQueriedParent(Community.sObjectType),
-            NetworkModeration.EntityId => getGenericParentProvider(FeedItem.sObjectType)
         },
         Note.sObjectType => new Map<SObjectField, Object>
         {
@@ -395,33 +316,11 @@ public class DefaultFieldsCache
         {
             Product2.Name => 'Some Product'
         },
-        ProductEntitlementTemplate.sObjectType => new Map<SObjectField, Object>
-        {
-            ProductEntitlementTemplate.EntitlementTemplateId => getGenericParentProvider(EntitlementTemplate.sObjectType),
-            ProductEntitlementTemplate.Product2Id => getGenericParentProvider(Product2.sObjectType)
-        },
         PushTopic.sObjectType => new Map<SObjectField, Object>
         {
             PushTopic.Name => SObjectFactory.provideUniqueString('PushTopic'),
             PushTopic.Query => 'SELECT Id FROM Account WHERE Name = null',
             PushTopic.ApiVersion => 35
-        },
-        QuantityForecast.sObjectType => new Map<SObjectField, Object>
-        {
-            QuantityForecast.OwnerId => SObjectFactory.provideGenericParent(User.sObjectType, User.ForecastEnabled, true),
-            QuantityForecast.StartDate => Date.today(),
-            QuantityForecast.Quota => 10
-        },
-        Question.sObjectType => new Map<SObjectField, Object>
-        {
-            Question.CommunityId => SObjectFactory.provideQueriedParent(Community.sObjectType),
-            Question.Title => 'Some Question'
-        },
-        QuestionDataCategorySelection.sObjectType => new Map<SObjectField, Object>
-        {
-            QuestionDataCategorySelection.ParentId => getGenericParentProvider(Question.sObjectType),
-            QuestionDataCategorySelection.DataCategoryName => 'Privacy_and_Security',
-            QuestionDataCategorySelection.DataCategoryGroupName => 'Support'
         },
         SObjectType.QueueSobject.getSObjectType() => new Map<SObjectField, Object>
         {
@@ -439,31 +338,9 @@ public class DefaultFieldsCache
             QuickTextShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
             QuickTextShare.AccessLevel => 'Edit'
         },
-        Reply.sObjectType => new Map<SObjectField, Object>
-        {
-            Reply.QuestionId => getGenericParentProvider(Question.sObjectType),
-            Reply.Body => 'Some Body'
-        },
-        RevenueForecast.sObjectType => new Map<SObjectField, Object>
-        {
-            RevenueForecast.OwnerId => SObjectFactory.provideGenericParent(User.sObjectType, User.ForecastEnabled, true),
-            RevenueForecast.StartDate => Date.today(),
-            RevenueForecast.Quota => 10
-        },
         SearchPromotionRule.sObjectType => new Map<SObjectField, Object>
         {
             SearchPromotionRule.Query => 'some query'
-        },
-        ServiceContract.sObjectType => new Map<SObjectField, Object>
-        {
-            ServiceContract.Pricebook2Id => Test.getStandardPricebookId(),
-            ServiceContract.Name => 'Some Contract'
-        },
-        ServiceContractShare.sObjectType => new Map<SObjectField, Object>
-        {
-            ServiceContractShare.ParentId => getGenericParentProvider(ServiceContract.sObjectType),
-            ServiceContractShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
-            ServiceContractShare.AccessLevel => 'Edit'
         },
         Solution.sObjectType => new Map<SObjectField, Object>
         {
@@ -529,18 +406,6 @@ public class DefaultFieldsCache
             UserPackageLicense.UserId => getGenericParentProvider(User.sObjectType),
             UserPackageLicense.PackageLicenseId => SObjectFactory.provideQueriedParent(PackageLicense.sObjectType)
         },
-        UserProvisioningRequest.sObjectType => new Map<SObjectField, Object>
-        {
-            UserProvisioningRequest.State => 'New',
-            UserProvisioningRequest.Operation => 'Read',
-            UserProvisioningRequest.ApprovalStatus => 'Denied'
-        },
-        UserProvisioningRequestShare.sObjectType => new Map<SObjectField, Object>
-        {
-            UserProvisioningRequestShare.ParentId => getGenericParentProvider(UserProvisioningRequest.sObjectType),
-            UserProvisioningRequestShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
-            UserProvisioningRequestShare.AccessLevel => 'Edit'
-        },
         UserRole.sObjectType => new Map<SObjectField, Object>
         {
             UserRole.Name => 'Some Role'
@@ -550,11 +415,6 @@ public class DefaultFieldsCache
             UserShare.UserId => getGenericParentProvider(User.sObjectType),
             UserShare.UserOrGroupId => getGenericParentProvider(User.sObjectType),
             UserShare.UserAccessLevel => 'Edit'
-        },
-        Vote.sObjectType => new Map<SObjectField, Object>
-        {
-            Vote.ParentId => getGenericParentProvider(Question.sObjectType),
-            Vote.Type => 'Up'
         }
     };
 }
