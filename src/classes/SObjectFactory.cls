@@ -8,7 +8,7 @@ public class SObjectFactory
             if (ADMIN_USER == null)
                 ADMIN_USER = [
                     SELECT Id FROM User WHERE IsActive = true
-                    AND Profile.Name = 'Counsyl System Admin'
+                    AND Profile.Name = 'Custom System Admin' // UPDATE TO YOUR SYS ADMIN PROFILE
                     LIMIT 1
                 ];
             return ADMIN_USER;
